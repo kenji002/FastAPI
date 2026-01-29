@@ -6,8 +6,10 @@ engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# データベースセッションの依存性注入
 def get_db():
+    """
+    データベースセッションの依存性注入
+    """
     db = SessionLocal()
     try:
         yield db
