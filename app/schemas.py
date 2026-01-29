@@ -2,9 +2,12 @@ from os import access
 from _contextvars import Token
 from pydantic import BaseModel, ConfigDict
 
+# --------------------------
+# Item Schemas
+# --------------------------
 class ItemBase(BaseModel):
     name: str
-    discription: str | None = None
+    description: str | None = None
 
 class ItemCreate(ItemBase):
     pass
@@ -12,12 +15,18 @@ class ItemCreate(ItemBase):
 class Item(ItemBase):
     id: int
     class Config:
-        orm_mode = True
+        model_config = ConfigDict(from_attributes=True)
 
-class Token(BaseModel):
+# --------------------------
+# Token Schema
+# --------------------------
+class TokenSchema(BaseModel):
     access_token: str
     token_type: str = "bearer"
 
+# --------------------------
+# User Schemas
+# --------------------------
 class UserLogin(BaseModel):
     username: str
     password: str

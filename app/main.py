@@ -4,7 +4,7 @@ from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 
 from app import schemas, crud
-from app.schemas import Token, UserLogin
+from app.schemas import TokenSchema, UserLogin
 from app.database import get_db
 from app.auth import (
     create_access_token,
@@ -14,7 +14,7 @@ from app.auth import (
     ALGORITHM,
 )
 
-app = FastAPI(title="FastAPI", version="0.0.1")
+app = FastAPI()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
@@ -25,7 +25,7 @@ fake_user = {
     "hashed_password": get_password_hash("password"),
 }
 
-@app.post("/login", response_model=Token)
+@app.post("/login", response_model=TokenSchema)
 def login(data: UserLogin):
     if data.username != fake_user["username"]:
         raise HTTPException(status_code=401, detail="Incorrect username")
@@ -54,29 +54,30 @@ def protected(user: str = Depends(get_current_user)):
     return {"message": f"Hello {user}"}
 
 @app.post("/create_item", response_model=schemas.Item)
-def create(item: schemas.ItemCreate, db: Session = Depends(get_db)):
+def create_item(item: schemas.ItemCreate, db: Session = Depends(get_db), user: str = Depends(get_current_user)):
+
     return crud.create_item(db, item)
 
 @app.get("/read_all", response_model=list[schemas.Item])
-def read_all(db: Session = Depends(get_db)):
+def read_all_items(db: Session = Depends(get_db)):
     return crud.get_items(db)
 
 @app.get("/read_item/{item_id}", response_model=schemas.Item)
-def read(item_id: int, db: Session = Depends(get_db)):
+def read_item(item_id: int, db: Session = Depends(get_db)):
     db_item = crud.get_item(db, item_id)
     if not db_item:
         raise HTTPException(status_code=404, detail="Item not found")
     return db_item
 
 @app.put("/update_item/{item_id}", response_model=schemas.Item)
-def update(item_id: int, item: schemas.ItemCreate, db: Session = Depends(get_db)):
+def update(item_id: int, item: schemas.ItemCreate, db: Session = Depends(get_db), user: str = Depends(get_current_user)):
     db_item = crud.update_item(db, item_id, item)
     if not db_item:
         raise HTTPException(status_code=404, detail="Item not found")
     return db_item
 
 @app.delete("/delete_item/{item_id}", response_model=schemas.Item)
-def delete(item_id: int, db: Session = Depends(get_db)):
+def delete(item_id: int, db: Session = Depends(get_db), user: str = Depends(get_current_user)):
     db_item = crud.delete_item(db, item_id)
     if not db_item:
         raise HTTPException(status_code=404, detail="Item not found")
