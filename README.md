@@ -3,7 +3,7 @@
 FastAPIを使用した、JWT認証とItem管理（CRUD）機能を持つバックエンドプロジェクトです。
 セキュアな認証機能と、ユーザーごとのデータ管理機能を備えています。
 
-## 🌟 主な機能
+## 主な機能
 
 - **ユーザー認証**: 
   - **Argon2**: セキュアなパスワードハッシュ化アルゴリズムを採用
@@ -24,7 +24,7 @@ FastAPIを使用した、JWT認証とItem管理（CRUD）機能を持つバッ�
 | **認証 / セキュリティ** | [python-jose](https://github.com/mpdavis/python-jose), [passlib](https://passlib.readthedocs.io/) |
 | **テスト** | [pytest](https://docs.pytest.org/), [httpx](https://www.python-httpx.org/) |
 
-## 🚀 セットアップ
+## セットアップ
 
 ### 1. 依存関係のインストール
 
@@ -42,7 +42,7 @@ uvicorn myapp.main:app --reload
 
 実行後、[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) にアクセスすることで、Swagger UIからインタラクティブにAPIを試すことができます。
 
-## 🧪 テストの実行
+## テストの実行
 
 ```bash
 python -m pytest
@@ -52,7 +52,7 @@ python -m pytest
 - **共通設定**: `myapp/tests/conf_test.py` にて、テスト用DBの作成や共通フィクスチャが定義されています。
 - **データクリーンアップ**: 各テストが走る前にデータベースが初期化されるため、テスト間の副作用がありません。
 
-## 📂 プロジェクト構成
+## プロジェクト構成
 
 ```text
 .
@@ -68,3 +68,4 @@ python -m pytest
 ├── pytest.ini          # pytest設定ファイル
 └── requirements.txt    # 依存ライブラリ一覧
 ```
+
